@@ -17,8 +17,8 @@ class DB {
         return this.connection.query("SELECT Employee.id, Employee.first_name, Employee.last_name, Role.title, Department.name AS Department, Role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS Manager FROM Employee LEFT JOIN role on Employee.role_id = Role.id LEFT JOIN Department on Role.department_id = Department.id LEFT JOIN Employee Manager on Manager.id = Employee.manager_id")
     }
 
-    createEmployee(newEmployee) {
-        return this.connection.query("INSERT INTO Employee SET ?", newEmployee)
+    createEmployee() {
+        return this.connection.query("INSERT INTO Employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)")
     }
 }
 
