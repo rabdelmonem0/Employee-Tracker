@@ -18,51 +18,75 @@ function start() {
         name: "trackerChoice",
         message: "What would you like to do?",
         choices: [
-          "View All Employees By Department",
-          "View All Employees By Manager",
+          "View All Departments",
+          "View All Employees",
+          "View All Roles",
           "Add Employee",
+          "Add Department",
+          "Add Role",
           "Remove Employee",
           "Update Employee Role",
           "Update Employee Manager",
-          "View All Roles",
+          "QUIT"
         ],
       },
     ])
     .then((choice) => {
       console.log(choice.trackerChoice);
       switch (choice.trackerChoice) {
-        case "View All Employees By Department":
-          viewAllEmployees();
-          break;
-        case "View All Employees By Manager":
-          viewManager();
-          break;
+        case "View All Departments":
+            viewAllDepartments();
+            break;
+        case "View All Employees":
+            viewAllEmployees();
+            break;
         case "Add Employee":
-          addEmployee();
-          break;
+            addEmployee();
+            break;
+        case "Add Department":
+            addDepartment();
+            break;
+        case "Add Role":
+            addRole();
+            break;
         case "Remove Employee":
-          removeEmployee();
-          break;
+            removeEmployee();
+            break;
         case "Update Employee Role":
-          updateEmployeeRole();
-          break;
+            updateEmployeeRole();
+            break;
         case "Update Manager Role":
-          updateManagerRole();
-          break;
+            updateManagerRole();
+            break;
         case "View All Roles":
-          viewAllRoles();
-          break;
-      }
+            viewAllRoles();
+            break;
+        case "QUIT":
+            quit();
+            break;
+        }
     });
 }
 
-async function viewAllEmployees() {
-  const employees = await db.getAllEmployee();
-  allEmployees.push(employees);
-  start();
+function viewAllDepartments() {
+//   const employees = await db.getAllEmployee();
+//   allEmployees.push(employees);
+let query = "SELECT * FROM department";
+connection.query(query, function(err, res) {
+    if(err) throw err;
+    console.table(res);
+    start();
+})
 }
 
-function viewManager() {}
+function viewAllEmployees() {
+let query = "SELECT * FROM employee";
+connection.query(query, function(err, res) {
+    if(err) throw err;
+    console.table(res);
+    start();
+})
+}
 
 async function addEmployee() {
   // get all roles from the database
@@ -123,6 +147,9 @@ async function addEmployee() {
       );
     });
 }
+function addDepartment() {}
+
+function addRole() {}
 
 function removeEmployee() {}
 
@@ -130,6 +157,13 @@ function updateEmployeeRole() {}
 
 function updateManagerRole() {}
 
-function viewAllRoles() {}
+function viewAllRoles() {
+let query = "SELECT * FROM role";
+connection.query(query, function(err, res) {
+    if(err) throw err;
+    console.table(res);
+    start();
+})
+}
 
 initApp();
