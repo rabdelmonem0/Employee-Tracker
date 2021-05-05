@@ -147,9 +147,53 @@ async function addEmployee() {
       );
     });
 }
-function addDepartment() {}
+async function addDepartment() {
+    await inquirer.prompt({
+        type: 'input',
+        name: 'department',
+        message: 'What is the department name?'
+    })
+    .then((answer) => {
+        connection.query("INSERT INTO department (name) VALUES (?)", [answer.department], function(err,res){
+            if (err) throw err;
+            console.table(res)
+            start();
+        })
+    })
+}
 
-function addRole() {}
+async function addRole() {
+    await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role',
+            message: 'What is the name of this role?'
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'What is the salary of this role?'
+        },
+        {
+            type: 'input',
+            name: 'departmentId',
+            messgae: 'What is the department ID for this role?'
+        }
+    ])
+    .then((answers) => {
+        connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", 
+        [
+            answers.role,
+            answers.salary,
+            answers.departmentId
+        ],
+        function(err,res) {
+            if (err) throw err;
+            console.table(res);
+            start();
+        })
+    })
+}
 
 function removeEmployee() {}
 
@@ -164,6 +208,11 @@ connection.query(query, function(err, res) {
     console.table(res);
     start();
 })
+}
+
+function quit() {
+    connection.end();
+    process.exit();
 }
 
 initApp();
